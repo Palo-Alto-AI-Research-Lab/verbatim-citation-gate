@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "verbatim-citation-gate"
+version = "0.1.0"
+description = "Catch fabricated RAG citations before they reach the user: a zero-token verbatim gate + a burden-of-proof judge, framework-agnostic."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Palo Alto AI Research Lab" }]
+keywords = ["rag", "citations", "hallucination", "faithfulness", "grounding", "llm", "evaluation"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = []  # the gate is pure stdlib; the judge takes any llm_call you supply
+
+[project.urls]
+Homepage = "https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate"
+Issues = "https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues"
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/verbatim_citation_gate"]
