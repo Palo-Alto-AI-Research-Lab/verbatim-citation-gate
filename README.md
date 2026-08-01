@@ -1,5 +1,7 @@
 # verbatim-citation-gate
 
+📖 **Docs: <https://palo-alto-ai-research-lab.github.io/verbatim-citation-gate/>** — the two stages, the API, the verdicts, and every known limit with its issue.
+
 **Catch fabricated RAG citations before they reach the user.** A two-stage,
 framework-agnostic auditor for quote-style citations — the deterministic half
 runs with zero dependencies and zero tokens; the model half plugs into
