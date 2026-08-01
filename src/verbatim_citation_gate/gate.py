@@ -18,6 +18,7 @@ citation, and every fabrication it rejects costs zero model calls.
 from __future__ import annotations
 
 import re
+from functools import lru_cache
 
 __all__ = ["normalize", "quote_gate", "GateResult"]
 
@@ -41,6 +42,12 @@ def normalize(text: str) -> str:
     return " ".join(text.split())
 
 
+@lru_cache(maxsize=4096)
+def _normalized(text: str) -> str:
+    """Normalize repeated document text once while bounding retained memory."""
+    return normalize(text)
+
+
 def quote_gate(quote: str, cited_doc_id: str, docs: dict[str, str]) -> GateResult:
     """Check a quote against the document it is attributed to.
 
@@ -55,12 +62,16 @@ def quote_gate(quote: str, cited_doc_id: str, docs: dict[str, str]) -> GateResul
     ``"not_found"`` rather than raising, so a malformed citation can never be
     mistaken for a supported one.
     """
-    q = normalize(quote)
+    q = _normalized(quote)
     if not q:
         return "not_found"
     cited = docs.get(cited_doc_id)
-    if cited is not None and q in normalize(cited):
+    if cited is not None and q in _normalized(cited):
         return "found"
-    if any(q in normalize(text) for doc_id, text in docs.items() if doc_id != cited_doc_id):
+    if any(
+        q in _normalized(text)
+        for doc_id, text in docs.items()
+        if doc_id != cited_doc_id
+    ):
         return "misattributed"
     return "not_found"
