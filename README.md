@@ -131,6 +131,8 @@ Questions, war stories, or you want to run this on your own fleet:
 
 ## Contributors welcome — and there is a queue
 
+The queue is visible: **[verbatim-citation-gate — roadmap](https://github.com/users/Palo-Alto-AI-Research-Lab/projects/1)** — Now (an open PR exists), Next (scoped, free to take), Later (deferred, with the reason on the card), Shipped. Shipped is empty on purpose: there is no tagged release yet, and that is [issue #10](https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues/10).
+
 Issues labelled [`accepted`](https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues?q=is%3Aissue+is%3Aopen+label%3Aaccepted)
 are scoped, free to take, and nobody is on them. Comment **"claiming this"** — no permission needed —
 and it is yours for 7 days. New here? Start with
