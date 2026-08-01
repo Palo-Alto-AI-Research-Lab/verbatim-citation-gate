@@ -74,6 +74,28 @@ def test_normalize_preserves_numbers_and_percent():
     assert "28" in normalize("fell by 28 mg/dL")
 
 
+def test_cyrillic_quotes_keep_words_when_matching():
+    docs = {"report": "Отчёт показал: модель провалила 3 из 5 тестов безопасности."}
+
+    assert quote_gate("модель провалила 3 из 5 тестов", "report", docs) == "found"
+    assert quote_gate("модель успешно прошла 3 из 5 тестов", "report", docs) == "not_found"
+    assert quote_gate("компания уволила 3 сотрудников за 5 минут", "report", docs) == "not_found"
+
+
+def test_cjk_fabrication_with_shared_digits_is_not_found():
+    docs = {"report": "模型在 3 个测试中失败了"}
+
+    assert quote_gate("模型在 3 个测试中失败了", "report", docs) == "found"
+    assert quote_gate("模型通过了所有 3 个测试", "report", docs) == "not_found"
+
+
+def test_accented_latin_and_combining_marks_normalize_consistently():
+    docs = {"letter": "Grüße aus München"}
+
+    assert normalize("Straße") == "strasse"
+    assert quote_gate("GRÜSSE aus Mu\u0308nchen", "letter", docs) == "found"
+
+
 # --- Stage 2 + the two-stage audit -----------------------------------------
 
 def _fake_supports(system, user):

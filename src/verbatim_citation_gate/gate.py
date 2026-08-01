@@ -17,7 +17,7 @@ citation, and every fabrication it rejects costs zero model calls.
 
 from __future__ import annotations
 
-import re
+import unicodedata
 
 __all__ = ["normalize", "quote_gate", "GateResult"]
 
@@ -28,16 +28,17 @@ GateResult = str  # Literal["found", "misattributed", "not_found"]
 def normalize(text: str) -> str:
     """Case/typography/whitespace-insensitive form for verbatim matching.
 
-    Folds case, unifies smart quotes and dashes, drops punctuation that does
-    not carry meaning, and collapses runs of whitespace. Percent signs and
-    decimal points survive because ``25%`` and ``0.5`` are load-bearing in the
-    kind of quantitative claims citations are usually asked to support.
+    Applies Unicode compatibility normalization and case folding, drops
+    punctuation that does not carry meaning, and collapses runs of whitespace.
+    Percent signs and decimal points survive because ``25%`` and ``0.5`` are
+    load-bearing in the kind of quantitative claims citations usually support.
     """
-    text = text.lower()
-    text = re.sub(r"[‘’]", "'", text)   # ' '  -> '
-    text = re.sub(r"[“”]", '"', text)   # " "  -> "
-    text = re.sub(r"[–—]", "-", text)    # en/em dash -> hyphen
-    text = re.sub(r"[^a-z0-9%.]+", " ", text)
+    text = unicodedata.normalize("NFKC", text).casefold()
+    text = unicodedata.normalize("NFKC", text)
+    text = "".join(
+        char if char in "%." or unicodedata.category(char)[0] in "LNM" else " "
+        for char in text
+    )
     return " ".join(text.split())
 
 
