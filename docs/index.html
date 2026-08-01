@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>verbatim-citation-gate — docs: catch fabricated RAG citations</title>
+<meta name="description" content="A zero-token verbatim gate plus a burden-of-proof judge that reject fabricated, franken- and misattributed quotes in RAG pipelines. Python, framework-agnostic, MIT.">
+<link rel="canonical" href="https://palo-alto-ai-research-lab.github.io/verbatim-citation-gate/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Palo Alto AI Research Lab">
+<meta property="og:title" content="verbatim-citation-gate — docs">
+<meta property="og:description" content="Two stages against fabricated RAG citations: a free deterministic verbatim gate, then a burden-of-proof judge. Zero dependencies, any model.">
+<meta property="og:url" content="https://palo-alto-ai-research-lab.github.io/verbatim-citation-gate/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="verbatim-citation-gate — docs">
+<meta name="twitter:description" content="Two stages against fabricated RAG citations: a free deterministic verbatim gate, then a burden-of-proof judge.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": "verbatim-citation-gate",
+  "description": "A zero-token verbatim gate plus a burden-of-proof judge that catches fabricated, franken- and misattributed quotes in RAG citations.",
+  "codeRepository": "https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate",
+  "programmingLanguage": "Python",
+  "license": "https://opensource.org/licenses/MIT",
+  "author": { "@type": "Organization", "name": "Palo Alto AI Research Lab" }
+}
+</script>
+<style>
+  :root { --bg:#ffffff; --fg:#111418; --muted:#5a6572; --accent:#0b66c3; --card:#f4f6f8;
+          --border:#e1e6ea; --code:#f0f3f6; --warn:#8a5a00; --warnbg:#fff8e6; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0d1117; --fg:#e6edf3; --muted:#9aa7b3; --accent:#58a6ff; --card:#161b22;
+            --border:#30363d; --code:#161b22; --warn:#d29922; --warnbg:#241c07; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg);
+         font:17px/1.65 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+  main { max-width:820px; margin:0 auto; padding:44px 20px 80px; }
+  a { color:var(--accent); }
+  h1 { font-size:2em; margin:0 0 6px; letter-spacing:-.01em; }
+  .lede { font-size:1.12em; margin:0 0 18px; }
+  .sub { color:var(--muted); margin:0 0 26px; }
+  h2 { font-size:.85em; text-transform:uppercase; letter-spacing:.12em; color:var(--muted);
+       margin:42px 0 12px; padding-bottom:.35rem; border-bottom:1px solid var(--border); }
+  h3 { font-size:1.02em; margin:24px 0 6px; }
+  code, pre { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.88em; }
+  code { background:var(--code); padding:1px 5px; border-radius:4px; }
+  pre { background:var(--code); border:1px solid var(--border); border-radius:8px;
+        padding:14px 16px; overflow-x:auto; line-height:1.5; }
+  pre code { background:none; padding:0; }
+  .cta { display:flex; flex-wrap:wrap; gap:10px; margin:0 0 10px; }
+  .cta a { text-decoration:none; padding:9px 15px; border-radius:8px; font-weight:600;
+           border:1px solid var(--border); color:var(--fg); background:var(--card); }
+  .cta a.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  table { border-collapse:collapse; width:100%; margin:6px 0 10px; font-size:.94em; display:block; overflow-x:auto; }
+  th, td { border-bottom:1px solid var(--border); padding:8px 10px; text-align:left; vertical-align:top; }
+  th { color:var(--muted); font-weight:600; font-size:.86em; text-transform:uppercase; letter-spacing:.06em; }
+  .warn { background:var(--warnbg); border:1px solid var(--border); border-left:3px solid var(--warn);
+          border-radius:6px; padding:12px 14px; margin:12px 0; font-size:.96em; }
+  ul { padding-left:20px; } li { margin:6px 0; }
+  footer { margin-top:52px; padding-top:16px; border-top:1px solid var(--border);
+           color:var(--muted); font-size:.9em; }
+  footer a { margin-right:2px; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>verbatim-citation-gate</h1>
+<p class="lede">Catch fabricated RAG citations <b>before</b> they reach the user — with a check that costs zero tokens and cannot be talked out of its answer.</p>
+<p class="sub">Python ≥3.9 · zero dependencies for stage 1 · any model for stage 2 · MIT.
+Maintained by the <a href="https://palo-alto-ai-research-lab.github.io/">Palo Alto AI Research Lab</a>.</p>
+
+<div class="cta">
+  <a class="primary" href="https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate">Repository</a>
+  <a href="#install">Install</a>
+  <a href="#api">API</a>
+  <a href="#limits">Known limits</a>
+  <a href="https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues?q=is%3Aissue+is%3Aopen+label%3Aaccepted">Open queue</a>
+</div>
+
+<h2>The problem</h2>
+<p>RAG systems love to cite. What matters is <i>how they fail</i>: a quote can read as
+authoritative and word-for-word and still be</p>
+<ul>
+  <li><b>fabricated</b> — a plausible sentence that appears in no source;</li>
+  <li>a <b>frankenquote</b> — every word is real, but the sentence was stitched together and never written;</li>
+  <li><b>misattributed</b> — a real quote lifted from a <i>different</i> document.</li>
+</ul>
+<p>A judge model asked “does this quote support this claim?” waves all three through: they read as
+fluent and supportive. The fix is to ask the cheaper, prior question first, deterministically.</p>
+
+<h2>The two stages</h2>
+<pre><code>                 ┌──────────────────────────┐
+ claim + quote → │ 1. verbatim gate (free)   │ → not_found / misattributed   (rejected, 0 tokens)
+   + doc id      └─────────────┬────────────┘
+                               │ found
+                               ▼
+                 ┌──────────────────────────┐
+                 │ 2. skeptical judge (LLM)  │ → supports / partial / unrelated / contradicts
+                 └──────────────────────────┘</code></pre>
+
+<h3>Stage 1 — the verbatim gate</h3>
+<p>Pure <code>re</code> and substring matching over a normalized form (case, smart quotes, dashes and
+whitespace folded; digits, <code>.</code> and <code>%</code> preserved, because <code>25%</code> and
+<code>0.5</code> are load-bearing in quantitative claims). The match is <b>contiguous</b>, which is
+what kills frankenquotes — a bag-of-words comparison would pass them. A real quote that lives in
+another document is surfaced as <code>misattributed</code> instead of collapsing into
+<code>not_found</code>, so that failure mode stays visible.</p>
+
+<h3>Stage 2 — the skeptical judge</h3>
+<p>For quotes that <i>do</i> exist, a burden-of-proof prompt decides whether the passage actually
+establishes the claim:</p>
+<ul>
+  <li><b>Default-refute</b> — the verdict starts at <i>unsupported</i>; ties break against the claim.</li>
+  <li><b>Outside knowledge is inadmissible</b> — a claim can be true in the world and still unsupported by <i>this</i> source.</li>
+  <li><b>Full-strength support or nothing</b> — same population, direction, magnitude and certainty, or the verdict caps at <code>partial</code> (subgroup→everyone, correlation→causation, “may”→“does”).</li>
+</ul>
+<p>If the judge's output does not parse — or the call raises — it <b>fails closed</b>: verdict
+<code>unrelated</code>, confidence <code>0.0</code>. An unverifiable citation never counts as support.</p>
+
+<h2 id="install">Install</h2>
+<div class="warn"><b>Not on PyPI yet.</b> Publishing is queued; until it lands, install from the
+repository. Any page or README telling you <code>pip install verbatim-citation-gate</code> is ahead
+of reality — <a href="https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues">tell us</a>
+if you find one we missed.</div>
+<pre><code>pip install "git+https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate"
+
+# or, from a clone, with the test extra:
+git clone https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate
+cd verbatim-citation-gate &amp;&amp; pip install -e ".[test]" &amp;&amp; pytest -q</code></pre>
+
+<h2>Quickstart</h2>
+<pre><code>from verbatim_citation_gate import audit_citation
+
+docs = {"veltranib-rct": "... Body weight was unchanged in both arms."}
+
+# Stage 1 only — no model, no key, fully offline:
+audit_citation("Body weight did not change.", "veltranib-rct",
+               "Body weight was unchanged in both arms.", docs)   # -> "found"
+
+# Both stages — supply any model as llm_call(system, user) -> str:
+def llm_call(system, user):
+    return client.messages.create(              # Anthropic shown; any vendor works
+        model="claude-haiku-4-5", system=system, max_tokens=1024,
+        messages=[{"role": "user", "content": user}],
+    ).content[0].text
+
+audit_citation("Body weight did not change.", "veltranib-rct",
+               "Body weight was unchanged in both arms.", docs, llm_call=llm_call)
+# -> "supports" | "partial" | "unrelated" | "contradicts" | "not_found" | "misattributed"</code></pre>
+<p><code>llm_call</code> is deliberately the smallest possible contract —
+<code>(system, user) → text</code> — so the judge wires to Claude, GPT, Gemini, Mistral, Cohere or a
+local Qwen without adapters. One-liners for several vendors are in
+<a href="https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/blob/main/examples/quickstart.py"><code>examples/quickstart.py</code></a>.</p>
+
+<h2 id="api">API</h2>
+<table>
+<tr><th>Callable</th><th>Signature</th><th>Returns</th></tr>
+<tr>
+  <td><code>audit_citation</code></td>
+  <td><code>(claim, doc_id, quote, docs, llm_call=None)</code></td>
+  <td>Full two-stage audit. Gate first; the judge is only reached by quotes that exist. With no
+      <code>llm_call</code>, returns the gate result — the deterministic half is usable entirely offline.</td>
+</tr>
+<tr>
+  <td><code>quote_gate</code></td>
+  <td><code>(quote, cited_doc_id, docs)</code></td>
+  <td><code>found</code> · <code>misattributed</code> · <code>not_found</code>. Fails closed: an empty
+      quote or unknown <code>doc_id</code> yields <code>not_found</code> rather than raising.</td>
+</tr>
+<tr>
+  <td><code>judge_support</code></td>
+  <td><code>(claim, quote, source, llm_call)</code></td>
+  <td>A <code>Verdict</code> (reasoning, label, confidence). Any exception or unparseable output →
+      <code>unrelated</code> / <code>0.0</code>.</td>
+</tr>
+<tr>
+  <td><code>normalize</code></td>
+  <td><code>(text)</code></td>
+  <td>The matching form used by the gate. Exported so you can reproduce a verdict by hand.</td>
+</tr>
+</table>
+
+<h3>Verdicts</h3>
+<table>
+<tr><th>Verdict</th><th>Stage</th><th>Meaning</th></tr>
+<tr><td><code>not_found</code></td><td>gate</td><td>The quote appears in no document — fabricated or stitched.</td></tr>
+<tr><td><code>misattributed</code></td><td>gate</td><td>Real quote, wrong source.</td></tr>
+<tr><td><code>supports</code></td><td>judge</td><td>The passage establishes the claim at full strength.</td></tr>
+<tr><td><code>partial</code></td><td>judge</td><td>Related and true of the source, but weaker than the claim.</td></tr>
+<tr><td><code>unrelated</code></td><td>judge</td><td>Does not bear on the claim — also the fail-closed value.</td></tr>
+<tr><td><code>contradicts</code></td><td>judge</td><td>The source says the opposite.</td></tr>
+</table>
+
+<h2>Why the gate goes first</h2>
+<p>The number you page on for a citation auditor is <b>recall of unfaithful citations</b> — the
+fraction of bad citations you actually catch. The gate lifts that recall for free on the three
+failure modes a judge is <i>worst</i> at, because those are exactly the ones that look supportive.
+What reaches the model is only the genuinely ambiguous case: a real quote whose <i>sufficiency</i>
+is a judgment call.</p>
+
+<h2 id="limits">Known limits — read before you trust it</h2>
+<p>Every one of these is an open issue with a reproduction, not a caveat we hope you skip.</p>
+<table>
+<tr><th>Limit</th><th>Consequence</th><th>Issue</th></tr>
+<tr>
+  <td><b>Non-Latin scripts.</b> <code>normalize()</code> keeps only <code>[a-z0-9%.]</code>, so Cyrillic, CJK, Greek and Arabic text is stripped to its digits.</td>
+  <td>🔴 In those scripts a fabricated quote can be graded <code>found</code>. Do not run this as your only gate on non-Latin corpora until the fix lands.</td>
+  <td><a href="https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues/1">#1</a></td>
+</tr>
+<tr>
+  <td><b>Re-normalization on every call.</b> The corpus is normalized per invocation instead of once.</td>
+  <td>Measured 2.4 s per miss on a 300-document corpus. Correct, but not a hot path yet.</td>
+  <td><a href="https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues/2">#2</a></td>
+</tr>
+<tr>
+  <td><b>No <code>py.typed</code> marker.</b></td>
+  <td>Downstream type checkers ignore the annotations that are already there.</td>
+  <td><a href="https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues/3">#3</a></td>
+</tr>
+<tr>
+  <td><b>One-word quotes.</b> A single common word matches almost any document.</td>
+  <td><code>found</code> on evidence too thin to mean anything; a minimum-evidence rule is needed.</td>
+  <td><a href="https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues/4">#4</a></td>
+</tr>
+</table>
+<p><b>Scope.</b> The gate presumes <b>quote-style</b> citations. If your pipeline cites by document id
+or character offsets, resolve the span to its source text first, then gate that text.</p>
+
+<h2>Contributing — there is a queue, and it is real</h2>
+<p>Issues labelled
+<a href="https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues?q=is%3Aissue+is%3Aopen+label%3Aaccepted"><code>accepted</code></a>
+are scoped, reproduced, and nobody is on them. Comment <b>“claiming this”</b> — no permission needed —
+and it is yours for 7 days.</p>
+<p><b>You keep the copyright to your code.</b> No CLA, no assignment, ever; your contribution goes in
+under this repo's existing MIT license, the same terms as ours. We answer every issue and PR within
+48 hours, including “no, and here is why” — our silence is our bug, so ping the thread.
+Full deal: <a href="https://github.com/Palo-Alto-AI-Research-Lab/.github/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>.</p>
+
+<h2>Built by</h2>
+<p>A human + AI team, and the git log says so: Claude writes most of the code, Codex and Grok review
+it, Gemini feeds the research — each credited on a commit only when its output changed that commit.
+Policy: <a href="https://github.com/Palo-Alto-AI-Research-Lab/.github/blob/main/AI-CONTRIBUTORS.md">AI-CONTRIBUTORS.md</a>.</p>
+
+<footer>
+<b>Palo Alto AI Research Lab</b> ·
+<a href="https://palo-alto-ai-research-lab.github.io/">Who we are</a> ·
+<a href="https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate">Repo</a> ·
+<a href="https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/blob/main/README.md">README</a> ·
+<a href="https://palo-alto-ai-research-lab.github.io/claude-bible/">claude-bible docs</a> ·
+<a href="https://github.com/Palo-Alto-AI-Research-Lab">All repos</a><br>
+MIT © 2026 Palo Alto AI Research Lab. Docs source:
+<code>docs/index.html</code> in this repository — edit it there, it is not generated.
+</footer>
+
+</main>
+</body>
+</html>

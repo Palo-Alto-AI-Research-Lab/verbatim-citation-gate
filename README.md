@@ -53,8 +53,13 @@ citation never counts as support.
 
 ## Install
 
+Not on PyPI yet — install from the repository:
+
 ```bash
-pip install verbatim-citation-gate      # or: pip install -e ".[test]"
+pip install "git+https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate"
+
+# from a clone, with the test extra:
+pip install -e ".[test]" && pytest -q
 ```
 
 ## Use
