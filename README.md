@@ -102,6 +102,28 @@ id or character offsets, resolve the span to its source text first, then gate
 that text. Contributions wiring this into specific frameworks (Haystack,
 LlamaIndex, LangChain, Cohere, Qwen-Agent, …) are welcome.
 
+## Roadmap
+
+**Now — [v0.1.0](https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/releases/tag/v0.1.0).**
+The deterministic gate (`gate.py`) and the burden-of-proof judge (`judge.py`), 14 tests green,
+install from git. Known limits are open issues, not footnotes — read them before you rely on it,
+especially [#1](https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues/1).
+
+**Next**, in the order we would take them:
+
+| What | Why it matters | Issue |
+|---|---|---|
+| Non-Latin normalization | today `normalize()` keeps only `[a-z0-9%.]`, so in Cyrillic/CJK the gate compares digits — a fabricated quote can pass as `found`. The tool's core promise is off in those scripts | [#1](https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues/1) |
+| Minimum-evidence rule | a one-word quote currently returns `found` | [#4](https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues/4) |
+| Normalize the corpus once | re-normalized per call: 2.4s per miss on 300 docs | [#2](https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues/2) |
+| `py.typed` marker | downstream type checkers see nothing today | [#3](https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues/3) |
+| Citations by doc id / offset | the gate presumes quote-style citations | [#9](https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues/9) |
+| PyPI package | so `pip install verbatim-citation-gate` is real | [#8](https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues/8) |
+
+Every noticeable change ships as a new release, so the
+[release feed](https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/releases)
+is the honest record of how far along this is — not the commit graph.
+
 ## AI contributors
 
 This project is built by a human + AI team, and the git log says so: Claude
@@ -125,7 +147,7 @@ Questions, war stories, or you want to run this on your own fleet:
 
 ## Contributors welcome — and there is a queue
 
-The queue is visible: **[verbatim-citation-gate — roadmap](https://github.com/users/Palo-Alto-AI-Research-Lab/projects/1)** — Now (an open PR exists), Next (scoped, free to take), Later (deferred, with the reason on the card), Shipped. Shipped is empty on purpose: there is no tagged release yet, and that is [issue #10](https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues/10).
+The queue is visible: **[verbatim-citation-gate — roadmap](https://github.com/users/Palo-Alto-AI-Research-Lab/projects/1)** — Now (an open PR exists), Next (scoped, free to take), Later (deferred, with the reason on the card), Shipped — and Shipped now starts with [v0.1.0](https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/releases/tag/v0.1.0).
 
 Issues labelled [`accepted`](https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues?q=is%3Aissue+is%3Aopen+label%3Aaccepted)
 are scoped, free to take, and nobody is on them. Comment **"claiming this"** — no permission needed —

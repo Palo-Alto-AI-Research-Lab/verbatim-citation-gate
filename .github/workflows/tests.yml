@@ -1,0 +1,27 @@
+name: tests
+
+# The suite existed since day one and nothing ran it on a schedule.
+# A test nobody runs is not a test — so it runs on every push and weekly.
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "17 5 * * 1"   # weekly, so rot surfaces without a push
+
+jobs:
+  tests:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.9", "3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: install with the test extra
+        run: pip install -e ".[test]"
+      - name: gate + judge tests
+        run: pytest -q
