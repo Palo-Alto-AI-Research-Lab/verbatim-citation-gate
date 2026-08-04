@@ -2,22 +2,18 @@
 
 📖 **Docs: <https://palo-alto-ai-research-lab.github.io/verbatim-citation-gate/>** — the two stages, the API, the verdicts, and every known limit with its issue.
 
-**Catch fabricated RAG citations before they reach the user.** A two-stage,
-framework-agnostic auditor for quote-style citations — the deterministic half
-runs with zero dependencies and zero tokens; the model half plugs into
-whatever LLM your pipeline already speaks.
+**Catch fabricated RAG citations before they reach the user.** A two-stage, framework-agnostic auditor for quote-style citations.
+The deterministic half is `src/verbatim_citation_gate/gate.py`: zero dependencies, zero tokens.
+The model half is `src/verbatim_citation_gate/judge.py`, and plugs into whatever LLM your pipeline already speaks.
 
-RAG systems love to cite. The problem is *how they fail*: a quote that reads as
-authoritative and word-for-word can still be
+RAG systems love to cite. The problem is *how they fail* — a quote that reads as authoritative and word-for-word can still be one of three things, each with its own case in `tests/test_gate.py`:
 
-- **fabricated** — a plausible sentence that appears in no source,
-- a **frankenquote** — every word is real, but the sentence was stitched
-  together and never actually written, or
-- **misattributed** — a real quote lifted from a *different* document.
+- **fabricated** — a plausible sentence that appears in no source (`test_fabrication_is_not_found`),
+- a **frankenquote** — every word is real, but the sentence was stitched together and never actually written (`test_frankenquote_is_not_found`), or
+- **misattributed** — a real quote lifted from a *different* document (`test_misattributed_real_quote_from_wrong_doc`).
 
-A judge model, asked "does this quote support this claim?", waves all three
-through: they read as fluent and supportive. The fix is to ask the cheaper,
-prior question first, deterministically.
+A judge model, asked "does this quote support this claim?", waves all three through: they read as fluent and supportive.
+The fix is to ask the cheaper, prior question first, deterministically — that is `src/verbatim_citation_gate/gate.py`.
 
 ## The two stages
 
@@ -32,26 +28,24 @@ prior question first, deterministically.
                  └─────────────────────────┘
 ```
 
-**Stage 1 — the verbatim gate.** Pure `re` + substring matching over a
-normalized form (case, smart quotes, dashes, and whitespace folded; numbers and
-`%` preserved). It cannot be sweet-talked, and every fabrication it rejects
-costs zero model calls. Frankenquotes fail because the match is contiguous, not
-bag-of-words. A real quote from the wrong document is surfaced as
-`misattributed` instead of being collapsed into `not_found`.
+**Stage 1 — the verbatim gate**, all of it in `src/verbatim_citation_gate/gate.py`.
+Pure `re` + substring matching over a normalized form: case, smart quotes, dashes and whitespace folded, numbers and `%` preserved (`test_normalize_preserves_numbers_and_percent` in `tests/test_gate.py`).
+It cannot be sweet-talked, and every fabrication it rejects costs zero model calls — proven by `test_audit_fabrication_never_calls_judge` in `tests/test_gate.py`.
+Frankenquotes fail because the match is contiguous, not bag-of-words, and a real quote from the wrong document is surfaced as `misattributed` rather than collapsed into `not_found` — the two need different fixes upstream (`src/verbatim_citation_gate/gate.py`).
 
-**Stage 2 — the skeptical judge.** For quotes that *do* exist, a burden-of-proof
-prompt decides whether the passage actually establishes the claim:
+**Stage 2 — the skeptical judge**, all of it in `src/verbatim_citation_gate/judge.py`.
+For quotes that *do* exist, a burden-of-proof prompt decides whether the passage actually establishes the claim. All three rules below live in that file's prompt:
 
-1. **Default-refute** — the verdict starts at *unsupported*; the quote must earn
-   `supports`, and ties break against the claim.
-2. **Outside knowledge is inadmissible** — a claim can be true in the world and
-   still unsupported by *this* source.
-3. **Full-strength support** — same population, direction, magnitude, and
-   certainty, or the verdict caps at `partial` (subgroup→everyone,
-   correlation→causation, "may"→"does").
+1. **Default-refute** (`judge.py`) — the verdict starts at *unsupported*; the quote must
+   earn `supports`, and ties break against the claim.
+2. **Outside knowledge is inadmissible** (`judge.py`) — a claim can be true in the world
+   and still unsupported by *this* source.
+3. **Full-strength support** (`judge.py`) — same population, direction, magnitude and
+   certainty, or the verdict caps at `partial`
+   (subgroup→everyone, correlation→causation, "may"→"does").
 
-If the judge's output does not parse, it **fails closed** — an unverifiable
-citation never counts as support.
+If the judge's output does not parse it **fails closed** (`src/verbatim_citation_gate/judge.py`):
+an unverifiable citation never counts as support.
 
 ## Install
 

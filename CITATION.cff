@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use verbatim-citation-gate in research or software, please cite it as below."
+title: "verbatim-citation-gate: a two-stage auditor for quote-style RAG citations"
+type: software
+authors:
+  - family-names: Dziatkovskii
+    given-names: Anton
+    orcid: "https://orcid.org/0000-0001-7408-3054"
+    affiliation: "Palo Alto AI Research Lab"
+repository-code: "https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate"
+url: "https://palo-alto-ai-research-lab.github.io/verbatim-citation-gate/"
+license: MIT
+keywords:
+  - retrieval-augmented generation
+  - citation verification
+  - hallucination detection
+  - faithfulness
+  - LLM evaluation
+abstract: >-
+  A framework-agnostic auditor for quote-style citations in RAG systems. Stage one
+  is a deterministic verbatim gate with no dependencies and no model calls: it
+  rejects fabricated quotes, frankenquotes (contiguity, not bag-of-words) and
+  surfaces misattributed quotes as a distinct verdict rather than collapsing them
+  into "not found". Stage two is a skeptical judge with a burden-of-proof prompt —
+  default-refute, outside knowledge inadmissible, support capped at partial unless
+  population, direction, magnitude and certainty all match — which fails closed on
+  unparseable output. Any LLM plugs in through a two-argument callable.
