@@ -58,6 +58,11 @@ pip install "git+https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-
 pip install -e ".[test]" && pytest -q
 ```
 
+<!-- pypi-install-marker -->
+
+Pure stdlib: the gate pulls in nothing, and the judge takes whatever `llm_call`
+you already have.
+
 ## Use
 
 ```python
@@ -84,7 +89,7 @@ audit_citation("Body weight did not change.", "veltranib-rct",
 `llm_call` is deliberately the smallest possible contract — `(system, user) → text`
 — so the judge wires to Claude, GPT, Gemini, Mistral, Cohere, or a local Qwen
 without adapters. OpenAI, Cohere, and other one-liners are in
-[`examples/quickstart.py`](examples/quickstart.py).
+[`examples/quickstart.py`](https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/blob/main/examples/quickstart.py).
 
 ## Why the gate goes first
 

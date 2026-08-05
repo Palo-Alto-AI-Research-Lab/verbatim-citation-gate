@@ -4,26 +4,45 @@ build-backend = "hatchling.build"
 
 [project]
 name = "verbatim-citation-gate"
-version = "0.1.0"
+# Read from src/verbatim_citation_gate/__init__.py -- a second hand-written
+# version here could drift from __version__ and CI would stay green while the
+# package and the module disagreed about what they are.
+dynamic = ["version"]
 description = "Catch fabricated RAG citations before they reach the user: a zero-token verbatim gate + a burden-of-proof judge, framework-agnostic."
 readme = "README.md"
 requires-python = ">=3.9"
-license = { text = "MIT" }
+license = { file = "LICENSE" }
 authors = [{ name = "Palo Alto AI Research Lab" }]
 keywords = ["rag", "citations", "hallucination", "faithfulness", "grounding", "llm", "evaluation"]
 classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Text Processing :: Linguistic",
 ]
 dependencies = []  # the gate is pure stdlib; the judge takes any llm_call you supply
 
 [project.urls]
 Homepage = "https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate"
+Repository = "https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate"
 Issues = "https://github.com/Palo-Alto-AI-Research-Lab/verbatim-citation-gate/issues"
+Documentation = "https://palo-alto-ai-research-lab.github.io/verbatim-citation-gate/"
 
 [project.optional-dependencies]
 test = ["pytest>=7"]
+
+[tool.hatch.version]
+path = "src/verbatim_citation_gate/__init__.py"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/verbatim_citation_gate"]

@@ -52,9 +52,11 @@ def quote_gate(quote: str, cited_doc_id: str, docs: dict[str, str]) -> GateResul
     * ``"not_found"``    — the quote appears in no document (fabricated /
       frankenquote), or the quote / citation is empty.
 
-    Fails closed: an empty quote or an unknown ``cited_doc_id`` yields
-    ``"not_found"`` rather than raising, so a malformed citation can never be
-    mistaken for a supported one.
+    Fails closed: an empty quote, or a ``cited_doc_id`` that is not in ``docs``,
+    can never come back ``"found"``. It raises nothing — an empty quote is
+    ``"not_found"``, and an unknown doc id is judged on the quote alone, so a
+    real quote with a bad citation is reported as ``"misattributed"`` (which is
+    what it is) rather than being collapsed into ``"not_found"``.
     """
     q = normalize(quote)
     if not q:

@@ -5,6 +5,7 @@ name: tests
 on:
   push:
   pull_request:
+  workflow_dispatch:
   schedule:
     - cron: "17 5 * * 1"   # weekly, so rot surfaces without a push
 
@@ -25,3 +26,74 @@ jobs:
         run: pip install -e ".[test]"
       - name: gate + judge tests
         run: pytest -q
+
+  package:
+    # A published wheel is a different artifact from the repo checkout, and the
+    # job above never sees it: `pip install -e .` runs the source tree. This is
+    # the only place that proves `pip install verbatim-citation-gate` gives a
+    # working import on the declared floor -- without it the PyPI page would be
+    # an untested claim.
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: build and validate the distributions
+        run: |
+          python -m pip install --upgrade pip build twine
+          python -m build
+          twine check --strict dist/*
+
+      - name: install the wheel into a bare environment and run the suite against it
+        run: |
+          python -m venv /tmp/pkgenv
+          /tmp/pkgenv/bin/pip install dist/*.whl pytest
+          # run from a directory where ./src is not importable, so the wheel is
+          # what is under test and not the checkout
+          mkdir -p /tmp/pkgtest && cp -R tests /tmp/pkgtest/tests
+          cd /tmp/pkgtest && /tmp/pkgenv/bin/python -m pytest -q tests
+
+      - name: the sdist is installable too, and reports the same version
+        # `twine check` reads metadata; it never builds the sdist back into a
+        # package. A source release broken by a missing file passes that check
+        # and fails only for whoever runs `pip install --no-binary`.
+        run: |
+          python -m venv /tmp/sdistenv
+          /tmp/sdistenv/bin/pip install dist/*.tar.gz
+          wheel_v=$(/tmp/pkgenv/bin/python -c "import verbatim_citation_gate as v; print(v.__version__)")
+          sdist_v=$(/tmp/sdistenv/bin/python -c "import verbatim_citation_gate as v; print(v.__version__)")
+          meta_v=$(/tmp/sdistenv/bin/python -c "from importlib.metadata import version; print(version('verbatim-citation-gate'))")
+          echo "wheel=$wheel_v sdist=$sdist_v metadata=$meta_v"
+          [ "$wheel_v" = "$sdist_v" ] && [ "$sdist_v" = "$meta_v" ] \
+            || { echo "::error::version drift between __version__ and package metadata"; exit 1; }
+
+      - name: the gate fails closed on the shapes it exists to catch
+        run: |
+          /tmp/pkgenv/bin/python - <<'PY'
+          from verbatim_citation_gate import quote_gate
+          docs = {"a": "Latency dropped by 40% after the rewrite.", "b": "Unrelated text."}
+          cases = [
+              ("Latency dropped by 40%", "a", "found"),
+              ("Latency dropped by 90%", "a", "not_found"),       # fabricated
+              ("Latency the rewrite dropped", "a", "not_found"),  # frankenquote
+              ("Latency dropped by 40%", "b", "misattributed"),
+              ("", "a", "not_found"),                              # empty quote
+              ("Latency dropped by 40%", "nope", "misattributed"),  # unknown doc id
+              ("Nothing like this exists", "nope", "not_found"),    # unknown id, fake quote
+          ]
+          bad = [(q, d, e, quote_gate(q, d, docs)) for q, d, e in cases
+                 if quote_gate(q, d, docs) != e]
+          assert not bad, bad
+          # the property under all of it: only a quote that is really in the
+          # document it names may come back "found"
+          leaked = [(q, d) for q, d, e in cases
+                    if quote_gate(q, d, docs) == "found" and q not in docs.get(d, "")]
+          assert not leaked, leaked
+          print("gate contract holds on all %d shapes" % len(cases))
+          PY
