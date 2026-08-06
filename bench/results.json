@@ -1,0 +1,393 @@
+{
+  "corpus": {
+    "docs": 295,
+    "chars": 430881
+  },
+  "cases": 4592,
+  "dropped_as_accidentally_real": 0,
+  "per_mode": {
+    "bracketed_insertion": {
+      "n": 295,
+      "correct": 0,
+      "rate": 0.0
+    },
+    "case_shift": {
+      "n": 295,
+      "correct": 295,
+      "rate": 1.0
+    },
+    "cyrillic_homoglyph": {
+      "n": 295,
+      "correct": 0,
+      "rate": 0.0
+    },
+    "editorial_ellipsis": {
+      "n": 285,
+      "correct": 0,
+      "rate": 0.0
+    },
+    "exact": {
+      "n": 295,
+      "correct": 295,
+      "rate": 1.0
+    },
+    "fabricated": {
+      "n": 295,
+      "correct": 295,
+      "rate": 1.0
+    },
+    "frankenquote": {
+      "n": 295,
+      "correct": 295,
+      "rate": 1.0
+    },
+    "hedge_dropped": {
+      "n": 73,
+      "correct": 73,
+      "rate": 1.0
+    },
+    "hyphen_linebreak": {
+      "n": 294,
+      "correct": 29,
+      "rate": 0.0986
+    },
+    "misattributed": {
+      "n": 295,
+      "correct": 295,
+      "rate": 1.0
+    },
+    "nbsp": {
+      "n": 295,
+      "correct": 295,
+      "rate": 1.0
+    },
+    "negation": {
+      "n": 133,
+      "correct": 133,
+      "rate": 1.0
+    },
+    "number_swap": {
+      "n": 16,
+      "correct": 16,
+      "rate": 1.0
+    },
+    "partial_span": {
+      "n": 290,
+      "correct": 290,
+      "rate": 1.0
+    },
+    "pdf_ligature": {
+      "n": 143,
+      "correct": 143,
+      "rate": 1.0
+    },
+    "soft_hyphen": {
+      "n": 294,
+      "correct": 0,
+      "rate": 0.0
+    },
+    "synonym_swap": {
+      "n": 114,
+      "correct": 114,
+      "rate": 1.0
+    },
+    "typography": {
+      "n": 295,
+      "correct": 295,
+      "rate": 1.0
+    },
+    "whitespace": {
+      "n": 295,
+      "correct": 295,
+      "rate": 1.0
+    }
+  },
+  "headline": {
+    "detection_rate": 1.0,
+    "false_positive_rate": 0.4254,
+    "honest_cases": 3371,
+    "bad_cases": 1221
+  },
+  "failures_sample": [
+    {
+      "mode": "soft_hyphen",
+      "expect": "found",
+      "doc": "2608.05148v1",
+      "quote": "Proc­edural gene­rators produce useful veri­fiable reas­oning problems at scale, but have received less atte­n",
+      "got": "not_found"
+    },
+    {
+      "mode": "hyphen_linebreak",
+      "expect": "found",
+      "doc": "2608.05148v1",
+      "quote": "Proc-\nedural generators produce useful verifiable reasoning problems at scale, but have received less attentio",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.05148v1",
+      "quote": "Procedural generators produce useful ... data for completion-supervised fine-tuning.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.05148v1",
+      "quote": "Procedural generators produce useful [sic] verifiable reasoning problems at scale, but have received less atte",
+      "got": "not_found"
+    },
+    {
+      "mode": "cyrillic_homoglyph",
+      "expect": "found",
+      "doc": "2608.05148v1",
+      "quote": "Prоcеdural gеneratоrs produce useful verifiable reasoning problems at scale, but have received less attention ",
+      "got": "not_found"
+    },
+    {
+      "mode": "soft_hyphen",
+      "expect": "found",
+      "doc": "2608.05139v1",
+      "quote": "Long­-horizon reas­oning in recent LLMs demands that the model switch between distinct skills inside a reas­on",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.05139v1",
+      "quote": "Long-horizon reasoning in recent ... to plan a schedule.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.05139v1",
+      "quote": "Long-horizon reasoning in recent [sic] LLMs demands that the model switch between distinct skills inside a rea",
+      "got": "not_found"
+    },
+    {
+      "mode": "cyrillic_homoglyph",
+      "expect": "found",
+      "doc": "2608.05139v1",
+      "quote": "Lоng-hоrizon rеasoning in rеcent LLMs demands that the model switch between distinct skills inside a reasoning",
+      "got": "not_found"
+    },
+    {
+      "mode": "soft_hyphen",
+      "expect": "found",
+      "doc": "2608.05138v1",
+      "quote": "Modern Greek is absent from NVIDIA's Nemotron retr­ieval models and from major mult­ilingual retr­ieval benc­h",
+      "got": "not_found"
+    },
+    {
+      "mode": "hyphen_linebreak",
+      "expect": "found",
+      "doc": "2608.05138v1",
+      "quote": "Modern Greek is absent from NVIDIA's Nemotron retr-\nieval models and from major multilingual retrieval benchma",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.05138v1",
+      "quote": "Modern Greek is absent ... financial, and medical applications.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.05138v1",
+      "quote": "Modern Greek is absent [sic] from NVIDIA's Nemotron retrieval models and from major multilingual retrieval ben",
+      "got": "not_found"
+    },
+    {
+      "mode": "cyrillic_homoglyph",
+      "expect": "found",
+      "doc": "2608.05138v1",
+      "quote": "Mоdеrn Grеek is absent frоm NVIDIA's Nemotron retrieval models and from major multilingual retrieval benchmark",
+      "got": "not_found"
+    },
+    {
+      "mode": "soft_hyphen",
+      "expect": "found",
+      "doc": "2608.05126v1",
+      "quote": "Spoken Language Unde­rstanding (SLU) is the core comp­onent of task­-oriented dialogue systems and a pivotal l",
+      "got": "not_found"
+    },
+    {
+      "mode": "hyphen_linebreak",
+      "expect": "found",
+      "doc": "2608.05126v1",
+      "quote": "Spoken Language Unde-\nrstanding (SLU) is the core component of task-oriented dialogue systems and a pivotal li",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.05126v1",
+      "quote": "Spoken Language Understanding (SLU) ... achieving seamless human-agent interaction.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.05126v1",
+      "quote": "Spoken Language Understanding (SLU) [sic] is the core component of task-oriented dialogue systems and a pivota",
+      "got": "not_found"
+    },
+    {
+      "mode": "cyrillic_homoglyph",
+      "expect": "found",
+      "doc": "2608.05126v1",
+      "quote": "Spоkеn Languagе Understanding (SLU) is the cоre component of task-oriented dialogue systems and a pivotal link",
+      "got": "not_found"
+    },
+    {
+      "mode": "soft_hyphen",
+      "expect": "found",
+      "doc": "2608.05124v1",
+      "quote": "Long context reas­oning in large language models (LLMs) is usually cons­trained by the fact that a single infe",
+      "got": "not_found"
+    },
+    {
+      "mode": "hyphen_linebreak",
+      "expect": "found",
+      "doc": "2608.05124v1",
+      "quote": "Long context reas-\noning in large language models (LLMs) is usually constrained by the fact that a single infe",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.05124v1",
+      "quote": "Long context reasoning in ... produce the final answer.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.05124v1",
+      "quote": "Long context reasoning in [sic] large language models (LLMs) is usually constrained by the fact that a single ",
+      "got": "not_found"
+    },
+    {
+      "mode": "cyrillic_homoglyph",
+      "expect": "found",
+      "doc": "2608.05124v1",
+      "quote": "Lоng cоntеxt rеasoning in large language models (LLMs) is usually constrained by the fact that a single infere",
+      "got": "not_found"
+    },
+    {
+      "mode": "soft_hyphen",
+      "expect": "found",
+      "doc": "2608.05097v1",
+      "quote": "Reas­oning about nece­ssity and poss­ibility depends on assu­mptions about acce­ssibility between worlds and a",
+      "got": "not_found"
+    },
+    {
+      "mode": "hyphen_linebreak",
+      "expect": "found",
+      "doc": "2608.05097v1",
+      "quote": "Reas-\noning about necessity and possibility depends on assumptions about accessibility between worlds and abou",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.05097v1",
+      "quote": "Reasoning about necessity and ... exist at each one.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.05097v1",
+      "quote": "Reasoning about necessity and [sic] possibility depends on assumptions about accessibility between worlds and ",
+      "got": "not_found"
+    },
+    {
+      "mode": "cyrillic_homoglyph",
+      "expect": "found",
+      "doc": "2608.05097v1",
+      "quote": "Rеasоning abоut nеcessity and possibility depends on assumptions about accessibility between worlds and about ",
+      "got": "not_found"
+    },
+    {
+      "mode": "soft_hyphen",
+      "expect": "found",
+      "doc": "2608.05086v1",
+      "quote": "Language models differ in how safely they behave and these diff­erences are measured by safety benc­hmarks.",
+      "got": "not_found"
+    },
+    {
+      "mode": "hyphen_linebreak",
+      "expect": "found",
+      "doc": "2608.05086v1",
+      "quote": "Language models differ in how safely they behave and these diff-\nerences are measured by safety benchmarks.",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.05086v1",
+      "quote": "Language models differ in ... measured by safety benchmarks.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.05086v1",
+      "quote": "Language models differ in [sic] how safely they behave and these differences are measured by safety benchmarks",
+      "got": "not_found"
+    },
+    {
+      "mode": "cyrillic_homoglyph",
+      "expect": "found",
+      "doc": "2608.05086v1",
+      "quote": "Languagе mоdеls differ in hоw safely they behave and these differences are measured by safety benchmarks.",
+      "got": "not_found"
+    },
+    {
+      "mode": "soft_hyphen",
+      "expect": "found",
+      "doc": "2608.05080v1",
+      "quote": "Crit­ic-free grou­p-based rein­forcement learning has become a scalable approach for post­-training large lang",
+      "got": "not_found"
+    },
+    {
+      "mode": "hyphen_linebreak",
+      "expect": "found",
+      "doc": "2608.05080v1",
+      "quote": "Crit-\nic-free group-based reinforcement learning has become a scalable approach for post-training large langua",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.05080v1",
+      "quote": "Critic-free group-based reinforcement learning ... post-training large language models.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.05080v1",
+      "quote": "Critic-free group-based reinforcement learning [sic] has become a scalable approach for post-training large la",
+      "got": "not_found"
+    },
+    {
+      "mode": "cyrillic_homoglyph",
+      "expect": "found",
+      "doc": "2608.05080v1",
+      "quote": "Critic-frее grоup-based reinfоrcement learning has become a scalable approach for post-training large language",
+      "got": "not_found"
+    },
+    {
+      "mode": "soft_hyphen",
+      "expect": "found",
+      "doc": "2608.05075v1",
+      "quote": "The spread of misi­nformation is widely perc­eived as a threat to demo­cratic deli­beration, yet how poli­tica",
+      "got": "not_found"
+    }
+  ]
+}
