@@ -4,8 +4,17 @@ Two numbers, both measured, neither flattering by construction.
 
 ```
 detection rate      (bad citations caught)   : 1.0000   over 1 221 cases
-false positive rate (honest quotes rejected) : 0.4254   over 3 371 cases
+false positive rate (honest quotes rejected) : 0.1721   over 3 371 cases
 ```
+
+The false-positive rate was **0.4254** when this benchmark was first run. Three
+of the five failing modes were normalization gaps — soft hyphens, line-break
+hyphenation and homoglyphs are the same characters encoded differently — and
+fixing them took the rate to 0.1721 (−25.3 points) **without moving detection**,
+which stayed at 1.0000 on all 1 221 bad citations. That constraint is the point:
+every normalization that makes matching more forgiving risks waving through the
+thing the gate exists to catch, so `test_transit_damage_does_not_rescue_a_fabrication`
+in `tests/test_gate.py` guards the trade directly.
 
 Corpus: **295 arXiv abstracts** (cs.CL, cs.IR, cs.SE — 430 881 chars), fetched by
 `build_corpus.py`. Deliberately not this project's own documents: benchmarking a
@@ -42,9 +51,9 @@ yields the same 4 592 cases and the same numbers on any machine.
 | `nbsp` — non-breaking spaces from HTML | 295 | 295 | 1.0000 | ✅ |
 | `partial_span` — a phrase inside a sentence | 290 | 290 | 1.0000 | ✅ |
 | `pdf_ligature` — ﬁ / ﬂ / ﬀ | 143 | 143 | 1.0000 | ✅ |
-| `hyphen_linebreak` — `informa-\ntion` | 294 | 29 | 0.0986 | ❌ |
-| `soft_hyphen` — U+00AD inside words | 294 | 0 | 0.0000 | ❌ |
-| `cyrillic_homoglyph` — Cyrillic о/е for Latin | 295 | 0 | 0.0000 | ❌ |
+| `hyphen_linebreak` — `informa-\ntion` | 294 | 294 | 1.0000 | ✅ |
+| `soft_hyphen` — U+00AD inside words | 294 | 294 | 1.0000 | ✅ |
+| `cyrillic_homoglyph` — Cyrillic о/е for Latin | 295 | 295 | 1.0000 | ✅ |
 | `editorial_ellipsis` — `"start … end"` | 285 | 0 | 0.0000 | ❌ |
 | `bracketed_insertion` — `"it [the model] …"` | 295 | 0 | 0.0000 | ❌ |
 
@@ -57,22 +66,19 @@ hedge, one near-synonym. Each of those shares almost every token with a true
 sentence in the cited document — the exact input where embedding similarity or
 an LLM judge scores high and says yes.
 
-**The false-positive rate is the honest bad news.** 42.5% of *honest* quotes are
-rejected, and the failures are not exotic:
-
-* Three are normalization gaps and are fixable — `soft_hyphen`,
-  `hyphen_linebreak` and `cyrillic_homoglyph` are all "the same characters,
-  encoded differently". They account for **25.3 points** of the 42.5.
-* Two are structural, not bugs — `editorial_ellipsis` and `bracketed_insertion`
-  are quotes that are *deliberately not contiguous*. Contiguity is what makes
-  frankenquote detection work, so supporting them needs a second matcher
-  (gapped-span matching with a bounded gap budget), not a looser normalizer.
-  They account for **17.2 points**.
+**The false-positive rate is the honest bad news**, and 17.2 points of it are
+still here. What remains is structural, not a bug: `editorial_ellipsis` and
+`bracketed_insertion` are quotes that are *deliberately not contiguous*, and
+contiguity is exactly what makes frankenquote detection work. Supporting them
+needs a second matcher — gapped-span matching with a bounded gap budget — not a
+looser normalizer, so it is a design change rather than a fix and is not
+attempted here.
 
 Anyone dropping this in front of users today should know: it will not lose a
-fabrication, and it will argue with roughly two of every five real quotes that
-came out of a PDF or an edited manuscript. Both halves of that sentence are
-measured, and the second one is why this file exists.
+fabrication, and it will still argue with roughly one in six real quotes —
+specifically, quotes an author shortened with an ellipsis or annotated in
+brackets. Both halves of that sentence are measured, and the second one is why
+this file exists.
 
 ## What is not measured here
 

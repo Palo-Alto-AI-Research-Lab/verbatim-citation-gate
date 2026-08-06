@@ -18,8 +18,8 @@
     },
     "cyrillic_homoglyph": {
       "n": 295,
-      "correct": 0,
-      "rate": 0.0
+      "correct": 295,
+      "rate": 1.0
     },
     "editorial_ellipsis": {
       "n": 285,
@@ -48,8 +48,8 @@
     },
     "hyphen_linebreak": {
       "n": 294,
-      "correct": 29,
-      "rate": 0.0986
+      "correct": 294,
+      "rate": 1.0
     },
     "misattributed": {
       "n": 295,
@@ -83,8 +83,8 @@
     },
     "soft_hyphen": {
       "n": 294,
-      "correct": 0,
-      "rate": 0.0
+      "correct": 294,
+      "rate": 1.0
     },
     "synonym_swap": {
       "n": 114,
@@ -104,25 +104,11 @@
   },
   "headline": {
     "detection_rate": 1.0,
-    "false_positive_rate": 0.4254,
+    "false_positive_rate": 0.1721,
     "honest_cases": 3371,
     "bad_cases": 1221
   },
   "failures_sample": [
-    {
-      "mode": "soft_hyphen",
-      "expect": "found",
-      "doc": "2608.05148v1",
-      "quote": "Proc­edural gene­rators produce useful veri­fiable reas­oning problems at scale, but have received less atte­n",
-      "got": "not_found"
-    },
-    {
-      "mode": "hyphen_linebreak",
-      "expect": "found",
-      "doc": "2608.05148v1",
-      "quote": "Proc-\nedural generators produce useful verifiable reasoning problems at scale, but have received less attentio",
-      "got": "not_found"
-    },
     {
       "mode": "editorial_ellipsis",
       "expect": "found",
@@ -135,20 +121,6 @@
       "expect": "found",
       "doc": "2608.05148v1",
       "quote": "Procedural generators produce useful [sic] verifiable reasoning problems at scale, but have received less atte",
-      "got": "not_found"
-    },
-    {
-      "mode": "cyrillic_homoglyph",
-      "expect": "found",
-      "doc": "2608.05148v1",
-      "quote": "Prоcеdural gеneratоrs produce useful verifiable reasoning problems at scale, but have received less attention ",
-      "got": "not_found"
-    },
-    {
-      "mode": "soft_hyphen",
-      "expect": "found",
-      "doc": "2608.05139v1",
-      "quote": "Long­-horizon reas­oning in recent LLMs demands that the model switch between distinct skills inside a reas­on",
       "got": "not_found"
     },
     {
@@ -166,27 +138,6 @@
       "got": "not_found"
     },
     {
-      "mode": "cyrillic_homoglyph",
-      "expect": "found",
-      "doc": "2608.05139v1",
-      "quote": "Lоng-hоrizon rеasoning in rеcent LLMs demands that the model switch between distinct skills inside a reasoning",
-      "got": "not_found"
-    },
-    {
-      "mode": "soft_hyphen",
-      "expect": "found",
-      "doc": "2608.05138v1",
-      "quote": "Modern Greek is absent from NVIDIA's Nemotron retr­ieval models and from major mult­ilingual retr­ieval benc­h",
-      "got": "not_found"
-    },
-    {
-      "mode": "hyphen_linebreak",
-      "expect": "found",
-      "doc": "2608.05138v1",
-      "quote": "Modern Greek is absent from NVIDIA's Nemotron retr-\nieval models and from major multilingual retrieval benchma",
-      "got": "not_found"
-    },
-    {
       "mode": "editorial_ellipsis",
       "expect": "found",
       "doc": "2608.05138v1",
@@ -198,27 +149,6 @@
       "expect": "found",
       "doc": "2608.05138v1",
       "quote": "Modern Greek is absent [sic] from NVIDIA's Nemotron retrieval models and from major multilingual retrieval ben",
-      "got": "not_found"
-    },
-    {
-      "mode": "cyrillic_homoglyph",
-      "expect": "found",
-      "doc": "2608.05138v1",
-      "quote": "Mоdеrn Grеek is absent frоm NVIDIA's Nemotron retrieval models and from major multilingual retrieval benchmark",
-      "got": "not_found"
-    },
-    {
-      "mode": "soft_hyphen",
-      "expect": "found",
-      "doc": "2608.05126v1",
-      "quote": "Spoken Language Unde­rstanding (SLU) is the core comp­onent of task­-oriented dialogue systems and a pivotal l",
-      "got": "not_found"
-    },
-    {
-      "mode": "hyphen_linebreak",
-      "expect": "found",
-      "doc": "2608.05126v1",
-      "quote": "Spoken Language Unde-\nrstanding (SLU) is the core component of task-oriented dialogue systems and a pivotal li",
       "got": "not_found"
     },
     {
@@ -236,27 +166,6 @@
       "got": "not_found"
     },
     {
-      "mode": "cyrillic_homoglyph",
-      "expect": "found",
-      "doc": "2608.05126v1",
-      "quote": "Spоkеn Languagе Understanding (SLU) is the cоre component of task-oriented dialogue systems and a pivotal link",
-      "got": "not_found"
-    },
-    {
-      "mode": "soft_hyphen",
-      "expect": "found",
-      "doc": "2608.05124v1",
-      "quote": "Long context reas­oning in large language models (LLMs) is usually cons­trained by the fact that a single infe",
-      "got": "not_found"
-    },
-    {
-      "mode": "hyphen_linebreak",
-      "expect": "found",
-      "doc": "2608.05124v1",
-      "quote": "Long context reas-\noning in large language models (LLMs) is usually constrained by the fact that a single infe",
-      "got": "not_found"
-    },
-    {
       "mode": "editorial_ellipsis",
       "expect": "found",
       "doc": "2608.05124v1",
@@ -268,27 +177,6 @@
       "expect": "found",
       "doc": "2608.05124v1",
       "quote": "Long context reasoning in [sic] large language models (LLMs) is usually constrained by the fact that a single ",
-      "got": "not_found"
-    },
-    {
-      "mode": "cyrillic_homoglyph",
-      "expect": "found",
-      "doc": "2608.05124v1",
-      "quote": "Lоng cоntеxt rеasoning in large language models (LLMs) is usually constrained by the fact that a single infere",
-      "got": "not_found"
-    },
-    {
-      "mode": "soft_hyphen",
-      "expect": "found",
-      "doc": "2608.05097v1",
-      "quote": "Reas­oning about nece­ssity and poss­ibility depends on assu­mptions about acce­ssibility between worlds and a",
-      "got": "not_found"
-    },
-    {
-      "mode": "hyphen_linebreak",
-      "expect": "found",
-      "doc": "2608.05097v1",
-      "quote": "Reas-\noning about necessity and possibility depends on assumptions about accessibility between worlds and abou",
       "got": "not_found"
     },
     {
@@ -306,27 +194,6 @@
       "got": "not_found"
     },
     {
-      "mode": "cyrillic_homoglyph",
-      "expect": "found",
-      "doc": "2608.05097v1",
-      "quote": "Rеasоning abоut nеcessity and possibility depends on assumptions about accessibility between worlds and about ",
-      "got": "not_found"
-    },
-    {
-      "mode": "soft_hyphen",
-      "expect": "found",
-      "doc": "2608.05086v1",
-      "quote": "Language models differ in how safely they behave and these diff­erences are measured by safety benc­hmarks.",
-      "got": "not_found"
-    },
-    {
-      "mode": "hyphen_linebreak",
-      "expect": "found",
-      "doc": "2608.05086v1",
-      "quote": "Language models differ in how safely they behave and these diff-\nerences are measured by safety benchmarks.",
-      "got": "not_found"
-    },
-    {
       "mode": "editorial_ellipsis",
       "expect": "found",
       "doc": "2608.05086v1",
@@ -338,27 +205,6 @@
       "expect": "found",
       "doc": "2608.05086v1",
       "quote": "Language models differ in [sic] how safely they behave and these differences are measured by safety benchmarks",
-      "got": "not_found"
-    },
-    {
-      "mode": "cyrillic_homoglyph",
-      "expect": "found",
-      "doc": "2608.05086v1",
-      "quote": "Languagе mоdеls differ in hоw safely they behave and these differences are measured by safety benchmarks.",
-      "got": "not_found"
-    },
-    {
-      "mode": "soft_hyphen",
-      "expect": "found",
-      "doc": "2608.05080v1",
-      "quote": "Crit­ic-free grou­p-based rein­forcement learning has become a scalable approach for post­-training large lang",
-      "got": "not_found"
-    },
-    {
-      "mode": "hyphen_linebreak",
-      "expect": "found",
-      "doc": "2608.05080v1",
-      "quote": "Crit-\nic-free group-based reinforcement learning has become a scalable approach for post-training large langua",
       "got": "not_found"
     },
     {
@@ -376,17 +222,171 @@
       "got": "not_found"
     },
     {
-      "mode": "cyrillic_homoglyph",
+      "mode": "editorial_ellipsis",
       "expect": "found",
-      "doc": "2608.05080v1",
-      "quote": "Critic-frее grоup-based reinfоrcement learning has become a scalable approach for post-training large language",
+      "doc": "2608.05075v1",
+      "quote": "The spread of misinformation ... actors remains poorly understood.",
       "got": "not_found"
     },
     {
-      "mode": "soft_hyphen",
+      "mode": "bracketed_insertion",
       "expect": "found",
       "doc": "2608.05075v1",
-      "quote": "The spread of misi­nformation is widely perc­eived as a threat to demo­cratic deli­beration, yet how poli­tica",
+      "quote": "The spread of misinformation [sic] is widely perceived as a threat to democratic deliberation, yet how politic",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.05064v1",
+      "quote": "Small open-weight language models ... defer to a human.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.05064v1",
+      "quote": "Small open-weight language models [sic] increasingly run in private, offline, and cost-sensitive settings, whe",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.05050v1",
+      "quote": "Against the backdrop of [sic] violence in police interactions with the U.S.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.05045v1",
+      "quote": "Released aligned large language [sic] models remain vulnerable to malicious downstream finetuning.",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.05028v1",
+      "quote": "A central question in ... operating over underdetermined input.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.05028v1",
+      "quote": "A central question in [sic] language acquisition is whether linguistic biases can emerge from general learning",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.05004v1",
+      "quote": "Mental health professionals have ... each other over time.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.05004v1",
+      "quote": "Mental health professionals have [sic] raised concerns about risks of psychological harm from interaction with",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.04980v1",
+      "quote": "We show that tiny ... feasible for larger models.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.04980v1",
+      "quote": "We show that tiny [sic] transformers can profitably employ a simple form of Chain of Thought, which we call pr",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.04962v1",
+      "quote": "Reinforcement learning (RL) post-training ... a major efficiency bottleneck.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.04962v1",
+      "quote": "Reinforcement learning (RL) post-training [sic] improves the reasoning capabilities of large language models, ",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.04949v1",
+      "quote": "Unified Multimodal Relation Extraction ... entities and visual objects.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.04949v1",
+      "quote": "Unified Multimodal Relation Extraction [sic] (UMRE) aims to identify intra-modal and cross-modal relations bet",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.04939v1",
+      "quote": "Social media videos often ... actions, captions, or speech.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.04939v1",
+      "quote": "Social media videos often [sic] communicate meanings that go beyond their visible actions, captions, or speech",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.04934v1",
+      "quote": "Training LLM agents commonly ... tasks with handcrafted verifiers.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.04934v1",
+      "quote": "Training LLM agents commonly [sic] relies on supervised fine-tuning from expert trajectories or online reinfor",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.04928v1",
+      "quote": "Chain-of-thought (CoT) reasoning offers ... work on CoT monitorability.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.04928v1",
+      "quote": "Chain-of-thought (CoT) reasoning offers [sic] a window into the decision-making of large language models (LLMs",
+      "got": "not_found"
+    },
+    {
+      "mode": "editorial_ellipsis",
+      "expect": "found",
+      "doc": "2608.04926v1",
+      "quote": "As chart images, tabular ... representation-generalizable beyond task-specific objectives.",
+      "got": "not_found"
+    },
+    {
+      "mode": "bracketed_insertion",
+      "expect": "found",
+      "doc": "2608.04926v1",
+      "quote": "As chart images, tabular [sic] data, and visualization code play increasingly important roles across diverse d",
       "got": "not_found"
     }
   ]

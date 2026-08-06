@@ -17,6 +17,7 @@ citation, and every fabrication it rejects costs zero model calls.
 
 from __future__ import annotations
 
+import re
 import unicodedata
 
 __all__ = ["normalize", "quote_gate", "GateResult"]
@@ -24,17 +25,57 @@ __all__ = ["normalize", "quote_gate", "GateResult"]
 # The three outcomes the gate can return.
 GateResult = str  # Literal["found", "misattributed", "not_found"]
 
+# A word broken across a line by a typesetter, as it survives copy-paste out of
+# a PDF: a hyphen (or its Unicode variants) immediately before the break. The
+# hyphen is an artifact of the layout, not of the word, so it is removed along
+# with the break — otherwise ``Proc-\nedural`` and ``Procedural`` never match.
+# A hyphen NOT followed by a line break is left alone and later becomes a space,
+# so ``state-of-the-art`` keeps its internal boundaries.
+_LINEBREAK_HYPHEN = re.compile(r"[-‐‑‒–]\s*[\r\n]\s*")
+
+# Characters that are visually identical to ASCII letters but encode as
+# different codepoints. They arrive when text round-trips through a tool that
+# swaps glyphs, or when a document mixes scripts. Only pairs that are
+# indistinguishable when rendered are listed: a reader cannot tell them apart,
+# so the matcher should not either. Deliberately conservative — near-lookalikes
+# (Greek epsilon vs "e", Cyrillic "в" vs "b") are NOT folded, because collapsing
+# genuinely different letters would invent matches that do not exist.
+_HOMOGLYPHS = str.maketrans(
+    {
+        # Cyrillic → Latin
+        "а": "a", "с": "c", "е": "e", "о": "o", "р": "p",
+        "х": "x", "у": "y", "і": "i", "ј": "j", "ѕ": "s",
+        # Greek → Latin
+        "ο": "o", "α": "a", "ρ": "p", "ι": "i", "κ": "k",
+        "ν": "v", "χ": "x",
+    }
+)
+
 
 def normalize(text: str) -> str:
     """Case/typography/whitespace-insensitive form for verbatim matching.
 
-    Applies Unicode compatibility normalization and case folding, drops
+    Applies Unicode compatibility normalization and case folding, folds
+    visually identical glyphs onto ASCII, repairs line-break hyphenation, drops
     punctuation that does not carry meaning, and collapses runs of whitespace.
     Percent signs and decimal points survive because ``25%`` and ``0.5`` are
     load-bearing in the kind of quantitative claims citations usually support.
+
+    The ordering matters. Hyphenation is repaired while the line breaks are
+    still present; zero-width and soft-hyphen formatting characters are
+    *deleted* rather than turned into spaces, since a soft hyphen sits inside a
+    word and a space there would split it; and glyph folding runs after case
+    folding so only lowercase mappings are needed.
     """
-    text = unicodedata.normalize("NFKC", text).casefold()
     text = unicodedata.normalize("NFKC", text)
+    text = _LINEBREAK_HYPHEN.sub("", text)
+    # Format characters (soft hyphen, zero-width space/joiners, bidi marks) are
+    # invisible *inside* words. Dropping them keeps the word whole; replacing
+    # them with a space would break it in two.
+    text = "".join(char for char in text if unicodedata.category(char) != "Cf")
+    text = text.casefold()
+    text = unicodedata.normalize("NFKC", text)
+    text = text.translate(_HOMOGLYPHS)
     text = "".join(
         char if char in "%." or unicodedata.category(char)[0] in "LNM" else " "
         for char in text

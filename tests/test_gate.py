@@ -158,3 +158,49 @@ def test_judge_rejects_out_of_vocabulary_verdict():
 
     v = judge_support("c", "q", "s", sneaky)
     assert v.verdict == "unrelated"  # unknown label -> fail closed
+
+
+# --- transit damage: honest quotes that arrive mangled -----------------------
+#
+# Measured on 295 arXiv abstracts (bench/): before these three were handled the
+# gate rejected 42.5% of honest quotes; after, 17.2%. Each test below is a
+# regression guard for one of the three classes that closed that 25-point gap.
+
+
+def test_soft_hyphen_inside_word_still_matches():
+    """PDF hyphenation leaves U+00AD inside words; it is invisible to a reader."""
+    assert quote_gate("fasting pla\u00adsma glu\u00adcose", "veltranib-rct", DOCS) == "found"
+
+
+def test_line_break_hyphen_is_rejoined():
+    """`pla-\nsma` is one word broken by a typesetter, not two words."""
+    assert quote_gate("fasting pla-\nsma glucose", "veltranib-rct", DOCS) == "found"
+
+
+def test_real_hyphenated_word_keeps_its_boundary():
+    """Only hyphens AT a line break are removed — `mg/dL`-style compounds stay intact."""
+    # A hyphen with no line break after it must not glue the two halves together,
+    # otherwise `re-cover` would start matching `recover`.
+    assert normalize("re-cover") != normalize("recover")
+
+
+def test_cyrillic_homoglyphs_still_match():
+    """Text round-tripped through a glyph-swapping tool: identical to the eye."""
+    assert quote_gate("f\u0430sting plasma gluc\u043ese", "veltranib-rct", DOCS) == "found"
+
+
+def test_homoglyph_folding_does_not_invent_matches():
+    """Folding look-alikes must not make genuinely different letters equal."""
+    # Cyrillic "в" is NOT folded to "b": they are different letters, and
+    # collapsing them would manufacture matches that do not exist.
+    assert normalize("\u0432") != normalize("b")
+
+
+def test_transit_damage_does_not_rescue_a_fabrication():
+    """The repairs must not turn a fabrication into a match.
+
+    This is the load-bearing test: every normalization that makes matching more
+    forgiving risks waving through the thing the gate exists to catch.
+    """
+    fabricated = "fasting pla\u00adsma glucose r\u043ese by 28 mg/dL"
+    assert quote_gate(fabricated, "veltranib-rct", DOCS) == "not_found"
